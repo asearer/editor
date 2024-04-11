@@ -14,4 +14,14 @@ class ProjectManagement:
         else:
             return f"Project '{project_name}' already exists."
 
+    def delete_project(self, project_name):
+        # Delete an existing project
+        project_path = os.path.join(os.getcwd(), project_name)
+        if os.path.exists(project_path):
+            os.rmdir(project_path)
+            return f"Project '{project_name}' deleted successfully."
+        else:
+            return f"Project '{project_name}' does not exist."
+
     # Add more methods as needed
+

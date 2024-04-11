@@ -14,5 +14,14 @@ class VersionControl:
         except subprocess.CalledProcessError as e:
             return f"Error committing changes: {e}"
 
+    def get_commit_log(self):
+        # Get commit log
+        try:
+            output = subprocess.check_output(["git", "log"], stderr=subprocess.STDOUT, universal_newlines=True)
+            return output
+        except subprocess.CalledProcessError as e:
+            return f"Error getting commit log: {e}"
+
     # Add more methods as needed
+
 

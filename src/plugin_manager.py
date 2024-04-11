@@ -18,5 +18,11 @@ class PluginManager:
                     spec.loader.exec_module(plugin_module)
                     self.plugins.append(plugin_module)
 
+    def run_plugins(self):
+        # Run loaded plugins
+        for plugin in self.plugins:
+            plugin.run()
+
     # Add more methods as needed
+
 

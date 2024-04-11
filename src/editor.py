@@ -13,3 +13,12 @@ class CodeEditor:
         with open(file_path, "w") as file:
             file.write(self.current_file)
 
+    def insert_text(self, text):
+        # Insert text into the code editor
+        self.current_file += text
+
+    def clear_editor(self):
+        # Clear the code editor
+        self.current_file = ""
+
+

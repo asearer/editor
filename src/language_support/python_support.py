@@ -15,4 +15,13 @@ class PythonSupport:
         except subprocess.TimeoutExpired:
             return "Execution timed out."
 
+    def check_syntax(self, code):
+        # Check syntax of Python code
+        try:
+            subprocess.run(["python", "-m", "py_compile", "-"], input=code, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            return "Syntax is correct."
+        except subprocess.CalledProcessError as e:
+            return f"Syntax error: {e.stderr}"
+
     # Add more methods as needed
+
