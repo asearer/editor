@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QMainWindow, QTextEdit, QVBoxLayout, QWidget, QAction, QFileDialog, QMessageBox, QMenu, QInputDialog
-from src.editor import CodeEditor
+from PyQt5.QtWidgets import QMainWindow, QTextEdit, QVBoxLayout, QWidget, QAction, QFileDialog, QMessageBox, QMenu, QInputDialog, QSplitter
+from PyQt5.QtCore import Qt
+from src.editor import CodeEditor  # Assuming CodeEditor is defined in src.editor module
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -33,6 +34,14 @@ class MainWindow(QMainWindow):
 
         self.project_creator_action = QMenu("&Project Creator", self)
         self.add_project_options()
+
+        self.horizontal_layout_action = QAction("Horizontal Layout", self)
+        self.horizontal_layout_action.setStatusTip("Switch to horizontal layout")
+        self.horizontal_layout_action.triggered.connect(lambda: self.set_layout(Qt.Horizontal))
+
+        self.vertical_layout_action = QAction("Vertical Layout", self)
+        self.vertical_layout_action.setStatusTip("Switch to vertical layout")
+        self.vertical_layout_action.triggered.connect(lambda: self.set_layout(Qt.Vertical))
 
     def add_project_options(self):
         projects = [
@@ -75,7 +84,8 @@ class MainWindow(QMainWindow):
 
     def create_view_menu(self, menubar):
         view_menu = menubar.addMenu("&View")
-        # Add view actions here
+        view_menu.addAction(self.horizontal_layout_action)
+        view_menu.addAction(self.vertical_layout_action)
 
     def create_project_menu(self, menubar):
         project_menu = menubar.addMenu("&Projects")
@@ -86,13 +96,20 @@ class MainWindow(QMainWindow):
         # Add help actions here
 
     def create_editor(self):
-        self.editor_widget = QWidget()
-        layout = QVBoxLayout()
-        self.editor_textedit = QTextEdit()  
-        layout.addWidget(self.editor_textedit)  
-        self.editor_widget.setLayout(layout)
+        self.editor_widget = QSplitter()
+        self.editor_widget.setOrientation(Qt.Vertical)  # Default vertical layout
+
+        # Create two text edit widgets
+        self.editor_textedit_1 = QTextEdit()
+        self.editor_textedit_2 = QTextEdit()
+
+        # Add the text edit widgets to the splitter
+        self.editor_widget.addWidget(self.editor_textedit_1)
+        self.editor_widget.addWidget(self.editor_textedit_2)
+
         self.setCentralWidget(self.editor_widget)
-        self.editor_textedit.setPlainText(self.editor.current_file)  
+        self.editor_textedit_1.setPlainText(self.editor.current_file)
+        self.editor_textedit_2.setPlainText(self.editor.current_file)
 
     def create_status_bar(self):
         self.statusBar().showMessage("Ready")
@@ -102,7 +119,8 @@ class MainWindow(QMainWindow):
         if file_path:
             try:
                 self.editor.open_file(file_path)
-                self.editor_textedit.setPlainText(self.editor.current_file)
+                self.editor_textedit_1.setPlainText(self.editor.current_file)
+                self.editor_textedit_2.setPlainText(self.editor.current_file)
                 self.statusBar().showMessage(f"Opened file: {file_path}")
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to open file: {e}")
@@ -111,19 +129,19 @@ class MainWindow(QMainWindow):
         file_path, _ = QFileDialog.getSaveFileName(self, "Save File")
         if file_path:
             try:
-                self.editor.current_file = self.editor_textedit.toPlainText()
+                self.editor.current_file = self.editor_textedit_1.toPlainText()
                 self.editor.save_file(file_path)
                 self.statusBar().showMessage(f"File saved: {file_path}")
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to save file: {e}")
 
     def set_font_size(self):
-        font_size, ok = QInputDialog.getInt(self, "Font Size", "Enter font size:", self.editor_textedit.font().pointSize(), 1, 100)
+        font_size, ok = QInputDialog.getInt(self, "Font Size", "Enter font size:", self.editor_textedit_1.font().pointSize(), 1, 100)
         if ok:
-            font = self.editor_textedit.font()
+            font = self.editor_textedit_1.font()
             font.setPointSize(font_size)
-            self.editor_textedit.setFont(font)
+            self.editor_textedit_1.setFont(font)
+            self.editor_textedit_2.setFont(font)
 
-    def create_project(self, project):
-        # Implement project creation functionality here
-        pass
+    def set_layout(self, orientation):
+        self.editor_widget.setOrientation(orientation)
