@@ -31,9 +31,30 @@ class MainWindow(QMainWindow):
         self.font_size_action.setStatusTip("Adjust font size")
         self.font_size_action.triggered.connect(self.set_font_size)
 
-        self.project_creator_action = QAction("&Project Creator", self)
-        self.project_creator_action.setStatusTip("Create a new project")
-        self.project_creator_action.triggered.connect(self.create_project)
+        self.project_creator_action = QMenu("&Project Creator", self)
+        self.add_project_options()
+
+    def add_project_options(self):
+        projects = [
+            "Chatbot", 
+            "Dart", 
+            "Flask/Django", 
+            "Go", 
+            "Java", 
+            "JavaScript", 
+            "Julia", 
+            "Kotlin", 
+            "Node", 
+            "Nim", 
+            "PHP", 
+            "Python", 
+            "Rust"
+        ]
+        projects.sort()
+        for project in projects:
+            action = QAction(project, self)
+            action.triggered.connect(lambda _, project=project: self.create_project(project))
+            self.project_creator_action.addAction(action)
 
     def create_menus(self):
         menubar = self.menuBar()
@@ -58,7 +79,7 @@ class MainWindow(QMainWindow):
 
     def create_project_menu(self, menubar):
         project_menu = menubar.addMenu("&Projects")
-        project_menu.addAction(self.project_creator_action)  # Add project creator action here
+        project_menu.addMenu(self.project_creator_action)  
 
     def create_help_menu(self, menubar):
         help_menu = menubar.addMenu("&Help")
@@ -103,6 +124,6 @@ class MainWindow(QMainWindow):
             font.setPointSize(font_size)
             self.editor_textedit.setFont(font)
 
-    def create_project(self):
+    def create_project(self, project):
         # Implement project creation functionality here
         pass
