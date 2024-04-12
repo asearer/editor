@@ -1,6 +1,21 @@
-from PyQt5.QtWidgets import QMainWindow, QTextEdit, QVBoxLayout, QWidget, QAction, QFileDialog, QMessageBox, QMenu, QInputDialog, QSplitter
+from PyQt5.QtWidgets import QMainWindow, QTextEdit, QAction, QFileDialog, QMessageBox, QMenu, QInputDialog, QSplitter
 from PyQt5.QtCore import Qt
-from src.editor import CodeEditor  # Assuming CodeEditor is defined in src.editor module
+import os
+
+# Adjusted import statement for the create_project function
+from src.project_creator.dart_creator import create_project  
+
+class CodeEditor:
+    def __init__(self):
+        self.current_file = ""
+
+    def open_file(self, file_path):
+        with open(file_path, "r") as f:
+            self.current_file = f.read()
+
+    def save_file(self, file_path):
+        with open(file_path, "w") as f:
+            f.write(self.current_file)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -87,7 +102,6 @@ class MainWindow(QMainWindow):
 
     def add_project_options(self):
         projects = [
-             
             "Dart", 
             "Flask/Django", 
             "Go", 
@@ -183,4 +197,8 @@ class MainWindow(QMainWindow):
             self.editor_textedit_1.setFont(font)
             self.editor_textedit_2.setFont(font)
 
-
+    # Added create_project method
+    def create_project(self, project_name):
+        save_location = QFileDialog.getExistingDirectory(self, "Select save location")
+        if save_location:
+            create_project(project_name, save_location)
