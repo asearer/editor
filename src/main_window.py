@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QTextEdit, QVBoxLayout, QWidget, QAction, QFileDialog, QMessageBox, QMenu
+from PyQt5.QtWidgets import QMainWindow, QTextEdit, QVBoxLayout, QWidget, QAction, QFileDialog, QMessageBox, QMenu, QInputDialog
 from src.editor import CodeEditor
 
 class MainWindow(QMainWindow):
@@ -27,9 +27,13 @@ class MainWindow(QMainWindow):
         self.save_action.setStatusTip("Save file")
         self.save_action.triggered.connect(self.save_file)
 
-        self.create_project_action = QAction("&Project Creator", self)
-        self.create_project_action.setStatusTip("Create a new project")
-        self.create_project_action.triggered.connect(self.create_project)
+        self.font_size_action = QAction("&Font Size", self)
+        self.font_size_action.setStatusTip("Adjust font size")
+        self.font_size_action.triggered.connect(self.set_font_size)
+
+        self.project_creator_action = QAction("&Project Creator", self)
+        self.project_creator_action.setStatusTip("Create a new project")
+        self.project_creator_action.triggered.connect(self.create_project)
 
     def create_menus(self):
         menubar = self.menuBar()
@@ -46,7 +50,7 @@ class MainWindow(QMainWindow):
 
     def create_edit_menu(self, menubar):
         edit_menu = menubar.addMenu("&Edit")
-        # Add edit actions here
+        edit_menu.addAction(self.font_size_action)  
 
     def create_view_menu(self, menubar):
         view_menu = menubar.addMenu("&View")
@@ -54,7 +58,7 @@ class MainWindow(QMainWindow):
 
     def create_project_menu(self, menubar):
         project_menu = menubar.addMenu("&Projects")
-        project_menu.addAction(self.create_project_action)  # Add project creator action here
+        project_menu.addAction(self.project_creator_action)  # Add project creator action here
 
     def create_help_menu(self, menubar):
         help_menu = menubar.addMenu("&Help")
@@ -91,6 +95,13 @@ class MainWindow(QMainWindow):
                 self.statusBar().showMessage(f"File saved: {file_path}")
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to save file: {e}")
+
+    def set_font_size(self):
+        font_size, ok = QInputDialog.getInt(self, "Font Size", "Enter font size:", self.editor_textedit.font().pointSize(), 1, 100)
+        if ok:
+            font = self.editor_textedit.font()
+            font.setPointSize(font_size)
+            self.editor_textedit.setFont(font)
 
     def create_project(self):
         # Implement project creation functionality here
