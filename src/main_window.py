@@ -17,6 +17,56 @@ class MainWindow(QMainWindow):
         self.create_editor()
         self.create_status_bar()
 
+        # Set dark mode style sheet
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #333;
+                color: #fff;
+            }
+            QMenuBar {
+                background-color: #666;
+                color: #fff;
+            }
+            QMenuBar::item {
+                background-color: #666;
+                color: #fff;
+            }
+            QMenuBar::item:selected {
+                background-color: #888;
+            }
+            QMenu {
+                background-color: #666;
+                color: #fff;
+            }
+            QMenu::item {
+                background-color: #666;
+                color: #fff;
+            }
+            QMenu::item:selected {
+                background-color: #888;
+            }
+            QSplitter::handle {
+                background-color: #666;
+            }
+            QSplitter::handle:horizontal {
+                width: 3px;
+            }
+            QSplitter::handle:vertical {
+                height: 3px;
+            }
+            QTextEdit {
+                background-color: #444;
+                color: #fff;
+                selection-background-color: #888;
+            }
+            QTextEdit:focus {
+                border: 2px solid #fff;
+            }
+            QTextEdit::selection {
+                background-color: #888;
+            }
+            """)
+
     def create_actions(self):
         self.open_action = QAction("&Open", self)
         self.open_action.setShortcut("Ctrl+O")
@@ -34,14 +84,6 @@ class MainWindow(QMainWindow):
 
         self.project_creator_action = QMenu("&Project Creator", self)
         self.add_project_options()
-
-        self.horizontal_layout_action = QAction("Horizontal Layout", self)
-        self.horizontal_layout_action.setStatusTip("Switch to horizontal layout")
-        self.horizontal_layout_action.triggered.connect(lambda: self.set_layout(Qt.Horizontal))
-
-        self.vertical_layout_action = QAction("Vertical Layout", self)
-        self.vertical_layout_action.setStatusTip("Switch to vertical layout")
-        self.vertical_layout_action.triggered.connect(lambda: self.set_layout(Qt.Vertical))
 
     def add_project_options(self):
         projects = [
@@ -84,8 +126,6 @@ class MainWindow(QMainWindow):
 
     def create_view_menu(self, menubar):
         view_menu = menubar.addMenu("&View")
-        view_menu.addAction(self.horizontal_layout_action)
-        view_menu.addAction(self.vertical_layout_action)
 
     def create_project_menu(self, menubar):
         project_menu = menubar.addMenu("&Projects")
@@ -143,5 +183,4 @@ class MainWindow(QMainWindow):
             self.editor_textedit_1.setFont(font)
             self.editor_textedit_2.setFont(font)
 
-    def set_layout(self, orientation):
-        self.editor_widget.setOrientation(orientation)
+
