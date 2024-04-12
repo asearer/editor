@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QTextEdit, QVBoxLayout, QWidget, QAction, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QTextEdit, QVBoxLayout, QWidget, QAction, QFileDialog, QMessageBox, QMenu
 from src.editor import CodeEditor
 
 class MainWindow(QMainWindow):
@@ -12,7 +12,7 @@ class MainWindow(QMainWindow):
 
     def init_ui(self):
         self.create_actions()
-        self.create_menu()
+        self.create_menus()
         self.create_editor()
         self.create_status_bar()
 
@@ -27,20 +27,38 @@ class MainWindow(QMainWindow):
         self.save_action.setStatusTip("Save file")
         self.save_action.triggered.connect(self.save_file)
 
-    def create_menu(self):
+    def create_menus(self):
         menubar = self.menuBar()
+        self.create_file_menu(menubar)
+        self.create_edit_menu(menubar)
+        self.create_view_menu(menubar)
+        self.create_help_menu(menubar)
+
+    def create_file_menu(self, menubar):
         file_menu = menubar.addMenu("&File")
         file_menu.addAction(self.open_action)
         file_menu.addAction(self.save_action)
 
+    def create_edit_menu(self, menubar):
+        edit_menu = menubar.addMenu("&Edit")
+        # Add edit actions here
+
+    def create_view_menu(self, menubar):
+        view_menu = menubar.addMenu("&View")
+        # Add view actions here
+
+    def create_help_menu(self, menubar):
+        help_menu = menubar.addMenu("&Help")
+        # Add help actions here
+
     def create_editor(self):
         self.editor_widget = QWidget()
         layout = QVBoxLayout()
-        self.editor_textedit = QTextEdit()  # Change this line
-        layout.addWidget(self.editor_textedit)  # Change this line
+        self.editor_textedit = QTextEdit()  
+        layout.addWidget(self.editor_textedit)  
         self.editor_widget.setLayout(layout)
         self.setCentralWidget(self.editor_widget)
-        self.editor_textedit.setPlainText(self.editor.current_file)  # Set contents
+        self.editor_textedit.setPlainText(self.editor.current_file)  
 
     def create_status_bar(self):
         self.statusBar().showMessage("Ready")
@@ -64,4 +82,3 @@ class MainWindow(QMainWindow):
                 self.statusBar().showMessage(f"File saved: {file_path}")
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to save file: {e}")
-
