@@ -4,7 +4,7 @@ from src.editor import CodeEditor
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Multi-Language IDE")
+        self.setWindowTitle("Alonza's Pretty OK IDE")
         self.setGeometry(100, 100, 800, 600)
 
         self.editor = CodeEditor()
@@ -27,11 +27,16 @@ class MainWindow(QMainWindow):
         self.save_action.setStatusTip("Save file")
         self.save_action.triggered.connect(self.save_file)
 
+        self.create_project_action = QAction("&Project Creator", self)
+        self.create_project_action.setStatusTip("Create a new project")
+        self.create_project_action.triggered.connect(self.create_project)
+
     def create_menus(self):
         menubar = self.menuBar()
         self.create_file_menu(menubar)
         self.create_edit_menu(menubar)
         self.create_view_menu(menubar)
+        self.create_project_menu(menubar)
         self.create_help_menu(menubar)
 
     def create_file_menu(self, menubar):
@@ -46,6 +51,10 @@ class MainWindow(QMainWindow):
     def create_view_menu(self, menubar):
         view_menu = menubar.addMenu("&View")
         # Add view actions here
+
+    def create_project_menu(self, menubar):
+        project_menu = menubar.addMenu("&Projects")
+        project_menu.addAction(self.create_project_action)  # Add project creator action here
 
     def create_help_menu(self, menubar):
         help_menu = menubar.addMenu("&Help")
@@ -82,3 +91,7 @@ class MainWindow(QMainWindow):
                 self.statusBar().showMessage(f"File saved: {file_path}")
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to save file: {e}")
+
+    def create_project(self):
+        # Implement project creation functionality here
+        pass
