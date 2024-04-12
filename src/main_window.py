@@ -87,7 +87,7 @@ class MainWindow(QMainWindow):
 
     def add_project_options(self):
         projects = [
-            "Chatbot", 
+             
             "Dart", 
             "Flask/Django", 
             "Go", 
