@@ -1,9 +1,15 @@
 import os
 
-def create_flask_project(project_name, directory):
+def create_project(project_name, save_location):
+    if not project_name:
+        raise ValueError("Please enter a project name.")
+
+    if not save_location:
+        raise ValueError("Please select a save location.")
+
     # Create project directory
-    project_path = os.path.join(directory, project_name)
-    os.makedirs(project_path)
+    project_dir = os.path.join(save_location, project_name)
+    os.makedirs(project_dir, exist_ok=True)
     
     # Create Flask app file
     with open(f"{project_path}/app.py", "w") as file:

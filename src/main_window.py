@@ -103,7 +103,8 @@ class MainWindow(QMainWindow):
     def add_project_options(self):
         projects = [
             "Dart", 
-            "Flask/Django", 
+            "Flask",
+            "Django",
             "Go", 
             "Java", 
             "JavaScript", 
